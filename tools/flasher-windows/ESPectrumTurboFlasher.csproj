@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ESPectrumTurboFlasher</RootNamespace>
+    <AssemblyName>ESPectrum-Turbo-Spectrum-Flasher</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <EmbeddedResource Include="Assets\esptool.exe"><LogicalName>ESPectrumTurboFlasher.Assets.esptool.exe</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="Assets\ESPectrum-Turbo-Spectrum-FULL.bin"><LogicalName>ESPectrumTurboFlasher.Assets.ESPectrum-Turbo-Spectrum-FULL.bin</LogicalName></EmbeddedResource>
+  </ItemGroup>
+</Project>
