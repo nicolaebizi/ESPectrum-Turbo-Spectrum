@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "tools/flasher/**"
+      - "tools/flasher-windows/**"
       - "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin"
       - ".github/workflows/build-flasher.yml"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -15,23 +18,59 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Download official Espressif esptool
+        shell: pwsh
+        run: |
+          $version = "4.12.0"
+          $zip = "esptool-v$version-windows-amd64.zip"
+          $url = "https://github.com/espressif/esptool/releases/download/v$version/$zip"
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\$zip"
+          Expand-Archive -Path "$env:RUNNER_TEMP\$zip" -DestinationPath "$env:RUNNER_TEMP\esptool" -Force
+          New-Item -ItemType Directory -Force -Path "tools/flasher-windows/Assets" | Out-Null
+          Copy-Item "$env:RUNNER_TEMP\esptool\esptool.exe" "tools/flasher-windows/Assets/esptool.exe" -Force
 
-      - name: Install dependencies
-        run: python -m pip install -r tools/flasher/requirements.txt
+      - name: Embed firmware
+        shell: pwsh
+        run: |
+          Copy-Item "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin" "tools/flasher-windows/Assets/ESPectrum-Turbo-Spectrum-FULL.bin" -Force
 
-      - name: Build EXE
-        run: >
-          pyinstaller --noconfirm --clean --onefile --windowed
-          --name ESPectrum-Turbo-Spectrum-Flasher
-          --add-data "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin;firmware"
-          tools/flasher/esp32_turbo_flasher.py
+      - name: Build native Windows GUI
+        shell: pwsh
+        run: |
+          msbuild tools/flasher-windows/ESPectrumTurboFlasher.csproj /t:Rebuild /p:Configuration=Release /p:Platform=x64
 
-      - name: Upload EXE
+      - name: Validate PE executable
+        shell: pwsh
+        run: |
+          $exe = "tools/flasher-windows/bin/Release/ESPectrum-Turbo-Spectrum-Flasher.exe"
+          if (-not (Test-Path $exe)) { throw "EXE was not produced." }
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) { throw "Output is not a valid Windows PE executable." }
+          Write-Host "EXE size: $([math]::Round($bytes.Length / 1MB, 2)) MB"
+          Write-Host "SHA256: $((Get-FileHash $exe -Algorithm SHA256).Hash)"
+
+      - name: Upload standalone EXE
         uses: actions/upload-artifact@v4
         with:
-          name: ESPectrum-Turbo-Spectrum-Flasher
-          path: dist/ESPectrum-Turbo-Spectrum-Flasher.exe
+          name: ESPectrum-Turbo-Spectrum-Flasher-Windows-x64
+          path: tools/flasher-windows/bin/Release/ESPectrum-Turbo-Spectrum-Flasher.exe
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Publish EXE into repository
+        shell: pwsh
+        run: |
+          $src = "tools/flasher-windows/bin/Release/ESPectrum-Turbo-Spectrum-Flasher.exe"
+          $dstDir = "Firmware/Windows-Flasher"
+          $dst = "$dstDir/ESPectrum-Turbo-Spectrum-Flasher.exe"
+          New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
+          Copy-Item $src $dst -Force
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$dst"
+          if (git diff --cached --quiet) {
+            Write-Host "Repository EXE is already identical."
+          } else {
+            git commit -m "Build Windows Turbo Spectrum flasher"
+            git push
+          }
