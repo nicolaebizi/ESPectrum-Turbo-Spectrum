@@ -27,7 +27,9 @@ jobs:
           Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\$zip"
           Expand-Archive -Path "$env:RUNNER_TEMP\$zip" -DestinationPath "$env:RUNNER_TEMP\esptool" -Force
           New-Item -ItemType Directory -Force -Path "tools/flasher-windows/Assets" | Out-Null
-          Copy-Item "$env:RUNNER_TEMP\esptool\esptool.exe" "tools/flasher-windows/Assets/esptool.exe" -Force
+          $esptoolExe = Get-ChildItem "$env:RUNNER_TEMP\esptool" -Recurse -Filter "esptool.exe" | Select-Object -First 1
+          if (-not $esptoolExe) { throw "esptool.exe not found in official archive." }
+          Copy-Item $esptoolExe.FullName "tools/flasher-windows/Assets/esptool.exe" -Force
 
       - name: Embed firmware
         shell: pwsh
