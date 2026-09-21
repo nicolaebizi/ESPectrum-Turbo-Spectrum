@@ -39,7 +39,11 @@ jobs:
       - name: Build native Windows GUI
         shell: pwsh
         run: |
-          msbuild tools/flasher-windows/ESPectrumTurboFlasher.csproj /t:Rebuild /p:Configuration=Release /p:Platform=x64
+          $vswhere = "$env:ProgramFiles(x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (-not (Test-Path $vswhere)) { throw "vswhere.exe not found." }
+          $msbuild = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | Select-Object -First 1
+          if (-not $msbuild) { throw "MSBuild.exe not found." }
+          & $msbuild "tools/flasher-windows/ESPectrumTurboFlasher.csproj" /t:Rebuild /p:Configuration=Release /p:Platform=x64
 
       - name: Validate PE executable
         shell: pwsh
