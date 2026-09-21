@@ -16,3 +16,12 @@ downloaded_fs*.bin
 /releases/**
 dependencies.lock
 build/*
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Backup / debug copies
+*.bak
+*.bak.*
+*.bak_*
+*.bak-*
