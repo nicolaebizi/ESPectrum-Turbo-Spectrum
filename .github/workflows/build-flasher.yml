@@ -42,7 +42,7 @@ jobs:
       - name: Build native Windows GUI
         shell: pwsh
         run: |
-          msbuild "tools/flasher-windows/ESPectrumTurboFlasher.csproj" /t:Rebuild /p:Configuration=Release /p:Platform=x64
+          msbuild "tools/flasher-windows/ESPectrumTurboFlasher.csproj" /t:Rebuild /p:Configuration=Release
 
       - name: Validate PE executable
         shell: pwsh
