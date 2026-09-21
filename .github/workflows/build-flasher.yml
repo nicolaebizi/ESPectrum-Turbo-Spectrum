@@ -1,0 +1,37 @@
+name: Build Windows Flasher
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/flasher/**"
+      - "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin"
+      - ".github/workflows/build-flasher.yml"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install -r tools/flasher/requirements.txt
+
+      - name: Build EXE
+        run: >
+          pyinstaller --noconfirm --clean --onefile --windowed
+          --name ESPectrum-Turbo-Spectrum-Flasher
+          --add-data "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin;firmware"
+          tools/flasher/esp32_turbo_flasher.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESPectrum-Turbo-Spectrum-Flasher
+          path: dist/ESPectrum-Turbo-Spectrum-Flasher.exe
