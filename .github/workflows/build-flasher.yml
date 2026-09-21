@@ -36,6 +36,11 @@ jobs:
         run: |
           Copy-Item "firmware/Turbo Spectrum/ESPectrum-Turbo-Spectrum-FULL.bin" "tools/flasher-windows/Assets/ESPectrum-Turbo-Spectrum-FULL.bin" -Force
 
+      - name: Install .NET Framework 4.8 Developer Pack
+        shell: pwsh
+        run: |
+          choco install netfx-4.8-devpack -y --no-progress
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
