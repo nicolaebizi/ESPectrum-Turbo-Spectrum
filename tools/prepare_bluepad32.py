@@ -2,6 +2,8 @@ Import("env")
 
 from pathlib import Path
 import subprocess
+import os
+import sys
 
 project = Path(env.subst("$PROJECT_DIR"))
 target = project / "third_party" / "bluepad32"
@@ -21,6 +23,11 @@ if not (target / ".git").exists():
 else:
     run(["git", "checkout", commit], cwd=target)
     run(["git", "submodule", "update", "--init", "--recursive"], cwd=target)
+
+btstack_port = target / "external" / "btstack" / "port" / "esp32"
+bt_env = os.environ.copy()
+bt_env["IDF_PATH"] = str(target / "src")
+subprocess.check_call([sys.executable, "integrate_btstack.py"], cwd=str(btstack_port), env=bt_env)
 
 # Bluepad32 v4.0-beta2 carries its BTstack dependency in the repository.
 # No global ESP-IDF / PlatformIO installation is modified.
