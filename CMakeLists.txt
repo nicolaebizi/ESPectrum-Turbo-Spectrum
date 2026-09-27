@@ -5,7 +5,6 @@ list(APPEND EXTRA_COMPONENT_DIRS
     "${CMAKE_CURRENT_LIST_DIR}/components/fabgl"
     "${CMAKE_CURRENT_LIST_DIR}/components/pwm_audio"
     "${CMAKE_CURRENT_LIST_DIR}/third_party/bluepad32/src/components"
-    "${CMAKE_CURRENT_LIST_DIR}/third_party/bluepad32/external/btstack/port/esp32"
 )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
