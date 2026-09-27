@@ -117,7 +117,7 @@ static void bp32_init(int argc, const char** argv) {
 static void bp32_task(void*) {
     btstack_init();
 
-    static uni_platform_t platform = {};
+    static struct uni_platform platform = {};
     platform.name = "ESPectrum";
     platform.init = bp32_init;
     platform.on_init_complete = bp32_on_init_complete;
