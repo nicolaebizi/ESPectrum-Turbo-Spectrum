@@ -54,6 +54,7 @@ To Contact the dev team you can write to zxespectrum@gmail.com
 #include "AudioIn.h"
 
 #include "ZXKeyb.h"
+#include "Bluepad32.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/timer.h"
@@ -649,6 +650,9 @@ void ESPectrum::setup() {
         }
 
     }
+
+    // Start Bluetooth input alongside the existing PS/2 input.
+    Bluepad32Input::setup();
 
     if (ps2mouse) {
         printf("Mouse detected\n");
