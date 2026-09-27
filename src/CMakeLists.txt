@@ -6,7 +6,6 @@ FILE(GLOB_RECURSE app_sources
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/*.S
 )
-list(FILTER app_sources EXCLUDE REGEX "/miniz/")
 
 idf_component_register(
     SRCS ${app_sources}
