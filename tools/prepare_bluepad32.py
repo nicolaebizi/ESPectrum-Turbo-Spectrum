@@ -22,7 +22,7 @@ else:
     run(["git", "checkout", commit], cwd=target)
     run(["git", "submodule", "update", "--init", "--recursive"], cwd=target)
 
-# Bluepad32 v4.0-beta0 carries its BTstack dependency in the repository.
+# Bluepad32 v4.0-beta2 carries its BTstack dependency in the repository.
 # No global ESP-IDF / PlatformIO installation is modified.
 print("[BLUEPAD32] Using project-local source at", target)
 print("[BLUEPAD32] Pinned commit:", commit)
