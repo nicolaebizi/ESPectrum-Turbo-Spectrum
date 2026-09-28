@@ -7,7 +7,7 @@ import sys
 
 project = Path(env.subst("$PROJECT_DIR"))
 target = project / "third_party" / "bluepad32"
-commit = "6888717"  # Pinned Bluepad32 commit with Bluetooth keyboard support.
+commit = "7e13707"  # Bluepad32 4.0.3; includes Bluetooth keyboard support and updated BTstack.
 
 def run(args, cwd=None, env=None):
     subprocess.check_call(args, cwd=str(cwd) if cwd else None, env=env)
