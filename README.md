@@ -408,3 +408,69 @@ documentation.
 - [Lord Alan Michael Sugar](https://en.wikipedia.org/wiki/Alan_Sugar).
 - [Investrónica team](https://es.wikipedia.org/wiki/Investr%C3%B3nica).
 - [Matthew Smith](https://en.wikipedia.org/wiki/Matthew_Smith_(games_programmer)) for [Manic Miner](https://en.wikipedia.org/wiki/Manic_Miner).
+
+
+---
+
+## ESPectrum-Turbo-Spectrum development status
+
+This repository is currently being developed in stages.
+
+### Stable pre-Bluetooth fallback
+
+The release:
+
+**ESPectrum-Turbo-Spectrum_no_bluethoot**
+
+is intended as the fallback point from before the Bluepad32/Bluetooth integration work.
+
+It is based on commit:
+
+`11675986e1d1dc1595ca35392d61d5328e178e4f`
+
+Commit message:
+
+**Remove failed Windows flasher**
+
+The fallback branch is:
+
+`release-no-bluethoot-base`
+
+This version retains the existing PS/2 keyboard input path and does not contain the later Bluetooth/Bluepad32 integration.
+
+### Current development direction
+
+The main development branch continues separately with the Bluetooth work. The Bluepad32 integration is being developed so that Bluetooth keyboard input can be combined with the existing PS/2 keyboard input, with Bluetooth gamepad support planned afterward.
+
+The Bluetooth work includes:
+
+- project-local Bluepad32 dependency preparation;
+- BTstack integration;
+- Bluetooth keyboard input bridge;
+- HID keyboard mapping;
+- keyboard key-release handling when a device disconnects;
+- ESP32 PSRAM build support;
+- complete ESP32 flash-image generation through GitHub Actions.
+
+The Bluetooth development version must not be confused with the `ESPectrum-Turbo-Spectrum_no_bluethoot` fallback release.
+
+### Build target
+
+The current hardware target for development is:
+
+- ESP32 Pico Kit
+- 4 MB Flash
+- PSRAM
+- PlatformIO environment: `psram`
+- ESP-IDF 4.4.5 / PlatformIO Espressif32 5.4
+
+### Firmware distribution
+
+GitHub Actions is used to build the firmware and, for the current development branch, generate a complete ESP32 flash image.
+
+The complete image is intended to be flashed at address `0x0000` and contains:
+
+- bootloader at `0x1000`;
+- partition table at `0x8000`;
+- application firmware at `0x10000`.
+
