@@ -1873,7 +1873,7 @@ IRAM_ATTR void ESPectrum::processKeyboard() {
 
 // static int64_t task2start, task2elapsed;
 
-IRAM_ATTR void ESPectrum::audioTask(void *unused) {
+void ESPectrum::audioTask(void *unused) {
 
     size_t written;
 
@@ -2026,7 +2026,7 @@ IRAM_ATTR void ESPectrum::COVOXGetSample() {
 // MAIN LOOP
 //=======================================================================================
 
-IRAM_ATTR void ESPectrum::loop() {
+void ESPectrum::loop() {
 
 static uint8_t OSDbgcolor = 1;
 
