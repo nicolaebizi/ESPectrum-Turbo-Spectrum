@@ -29,7 +29,7 @@ jobs:
             -o .pio/build/psram/merged.bin \
             0x1000 .pio/build/psram/bootloader.bin \
             0x8000 .pio/build/psram/partitions.bin \
-            0x10000 .pio/build/psram/firmware.bin
+            0x40000 .pio/build/psram/firmware.bin
       - name: Upload complete firmware
         uses: actions/upload-artifact@v4
         with:
