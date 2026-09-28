@@ -28,7 +28,7 @@ jobs:
 
       - name: Create complete flash image
         run: |
-          python -m esptool merge_bin \
+          python -m esptool --chip esp32 merge_bin \
             --flash_mode keep \
             --flash_freq keep \
             --flash_size keep \
