@@ -23,6 +23,25 @@ jobs:
       - name: Build PSRAM firmware
         run: pio run -e psram
 
+      - name: Create complete flash image
+        run: |
+          esptool.py merge_bin \
+            --flash_mode keep \
+            --flash_freq keep \
+            --flash_size keep \
+            -o .pio/build/psram/merged.bin \
+            0x1000 .pio/build/psram/bootloader.bin \
+            0x8000 .pio/build/psram/partitions.bin \
+            0x10000 .pio/build/psram/firmware.bin
+
+      - name: Upload complete firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: psram-complete-firmware
+          path: .pio/build/psram/merged.bin
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Upload linker diagnostics
         if: always()
         uses: actions/upload-artifact@v4
