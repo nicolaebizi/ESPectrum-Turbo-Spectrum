@@ -22,3 +22,14 @@ jobs:
 
       - name: Build PSRAM firmware
         run: pio run -e psram
+
+      - name: Upload linker diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: psram-linker-diagnostics
+          path: |
+            .pio/build/psram/firmware.map
+            .pio/build/psram/firmware.elf
+          if-no-files-found: warn
+          retention-days: 7
