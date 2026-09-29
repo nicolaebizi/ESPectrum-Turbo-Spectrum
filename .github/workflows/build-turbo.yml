@@ -2,7 +2,7 @@ name: Build ESPectrum Turbo Spectrum
 
 on:
   push:
-    branches: [ build-no-bluethoot-fallback ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
