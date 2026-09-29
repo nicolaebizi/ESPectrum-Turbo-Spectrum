@@ -1236,7 +1236,7 @@ bool ESPectrum::mouseButtonR = 0;
 // static uint8_t PS2cols[8] = { 0xbf, 0xbf, 0xbf, 0xbf, 0xbf, 0xbf, 0xbf, 0xbf };
 static uint8_t PS2cols[8] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
-IRAM_ATTR void ESPectrum::processKeyboard() {
+void ESPectrum::processKeyboard() {
 
     bool r = false;
 
