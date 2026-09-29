@@ -3,7 +3,7 @@ name: Build ESPectrum Turbo Spectrum
 
 on:
   push:
-    branches: [ main, build-bluepad32-corrected, test-bluepad32-br-edr-only ]
+    branches: [ main, build-bluepad32-corrected, test-bluepad32-br-edr-only, test-bluepad32-free-iram-processkeyboard ]
   workflow_dispatch:
 
 jobs:
